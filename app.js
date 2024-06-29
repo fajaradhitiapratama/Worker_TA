@@ -53,6 +53,31 @@ async function validator(message) {
   }
 }
 
+check_location = (id, lon, lat) => {
+  return new Promise( async (resolve, reject) => {
+    try {
+      firebase.get(firebase.ref(database,'SOIL/'+id)).then((snapshot) => {
+        var device = snapshot.val()
+        if(lon == "" && lat == "" ){
+          resolve(false);
+        }else{
+          if (device.lat != lat || device.long != lon){
+            resolve(true);
+          }else {
+            resolve(false);
+          }
+        }
+        
+      }).catch((error) => {
+        console.error("Error getting data:", error);
+      });
+    } catch (error) {
+        console.log(error)
+        reject(error)
+    }
+  })
+}
+
 check_device = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
